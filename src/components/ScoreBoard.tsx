@@ -13,16 +13,16 @@ const ScoreBoard: React.FC = () => {
 
     const [teams, setTeams] = useState(initTeams);
 
-    const handleOnPointsAdded = (team: ITeam) => {
+    const handleOnPointsAdded = (updatedTeam: ITeam) => {
         const allTeams: ITeam[] = teams.slice();
-        const objIndex = allTeams.findIndex(team => team.id);
-        allTeams[objIndex].points = team.points;
+        const objIndex: number = allTeams.findIndex((team: ITeam) => team.id === updatedTeam.id);
+        allTeams[objIndex] = updatedTeam;
         setTeams(allTeams);
     }
 
     const renderTeams = () => {
-        return teams.map((team: ITeam, index: number) =>
-            <Team key={team.id} team={team} OnPointsChange={handleOnPointsAdded}/>)
+        return teams.map((team: ITeam) =>
+            <Team key={team.id} team={team} onPointsChange={handleOnPointsAdded}/>)
     }
 
     return (

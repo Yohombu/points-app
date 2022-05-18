@@ -1,13 +1,13 @@
-import React, {useState} from "react";
+import React, {FormEvent, useState} from "react";
 import {Button, Col, Form, Row} from "react-bootstrap";
 import {ITeam} from "../types/pointTypes";
 
 type TeamProps = {
     team: ITeam
-    OnPointsChange: (team: ITeam) => void
+    onPointsChange: (team: ITeam) => void
 }
 
-const Team: React.FC<TeamProps> = (props:TeamProps) => {
+const Team: React.FC<TeamProps> = (props: TeamProps) => {
 
     const {team} = props;
 
@@ -20,60 +20,56 @@ const Team: React.FC<TeamProps> = (props:TeamProps) => {
     }
 
     const handlePointsAdd = () => {
-        if(!points){
+        if (!points) {
             return;
         }
-        props.OnPointsChange({...team, points: team.points + points});
+        props.onPointsChange({...team, points: team.points + points});
     }
 
     const handlePointSub = () => {
-        if(!points){
+        if (!points) {
             return;
         }
-        props.OnPointsChange({...team, points: team.points - points});
+        props.onPointsChange({...team, points: team.points - points});
     }
 
-    const handleSubmit = (event: any) => {
+    const handleSubmit = (event: FormEvent) => {
         event.preventDefault();
-
-        const form = event.currentTarget;
-        if (form.checkValidity() === false) {
-            event.stopPropagation();
-            setValidated(true);
-        }
+        setValidated(true);
+        handlePointsAdd();
     }
 
     return (
         <Col xs={12} sm={6} lg={4} xl={4} className="pb-5 pb-xl-0 pb-lg-0">
-        <Row>
-            <Col xs={12}>{team.name}</Col>
-            <Col xs={12}>{team.points}</Col>
-            <Col xs={12}>
-                <Form noValidate validated={validated} onSubmit={handleSubmit}>
-                    <Form.Group controlId="validationCustom01">
-                        <Form.Control
-                            required
-                            type="number"
-                            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                                handlePointsChange(e.target.value)}
-                        />
-                        <Form.Control.Feedback type="invalid">
-                            Points are required
-                        </Form.Control.Feedback>
-                    </Form.Group>
-                </Form>
-            </Col>
-            <Col xs={6} className='mt-2'>
-                <Button variant="primary" onClick={handlePointSub}>
-                    -Sub
-                </Button>
-            </Col>
-            <Col xs={6} className='text-end mt-2'>
-                <Button variant="primary" onClick={handlePointsAdd}>
-                    Add
-                </Button>
-            </Col>
-        </Row>
+            <Row>
+                <Col xs={12}>{team.name}</Col>
+                <Col xs={12}>{team.points}</Col>
+                <Col xs={12}>
+                    <Form noValidate validated={validated} onSubmit={handleSubmit}>
+                        <Form.Group controlId="validationCustom01">
+                            <Form.Control
+                                required
+                                type="number"
+                                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                                    handlePointsChange(e.target.value)}
+                            />
+                            <Form.Control.Feedback type="invalid">
+                                Points are required
+                            </Form.Control.Feedback>
+                        </Form.Group>
+                    </Form>
+                </Col>
+                <Col xs={6} className='mt-2'>
+                    <Button variant="primary" onClick={handlePointSub}>
+                        -Sub
+                    </Button>
+                </Col>
+                <Col xs={6} className='text-end mt-2'>
+                    <Button variant="primary" onClick={handlePointsAdd}>
+                        Add
+                    </Button>
+                </Col>
+            </Row>
         </Col>
     )
 }
